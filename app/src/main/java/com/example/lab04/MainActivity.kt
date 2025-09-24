@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,16 +21,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lab04.R // Asegúrate de que esta línea esté presente
 import com.example.lab04.ui.theme.DarkGray
 import com.example.lab04.ui.theme.Lab04Theme
 import com.example.lab04.ui.theme.OrangeJBL
 import com.example.lab04.ui.theme.White
 import com.example.lab04.ui.theme.Black
-import com.example.lab04.ui.theme.OrangeJBL
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +75,13 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
+        // Elemento de imagen (nuevo)
+        Image(
+            painter = painterResource(id = R.drawable.oso), // Referencia a tu archivo oso.png
+            contentDescription = "oso",
+            modifier = Modifier.size(100.dp).padding(bottom = 16.dp)
+        )
+
         // Texto principal "Android"
         Text(
             text = name,
@@ -97,7 +106,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "COMMIT 1",
+                    text = "COMMIT 2",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
