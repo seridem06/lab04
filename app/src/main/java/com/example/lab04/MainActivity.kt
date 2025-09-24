@@ -16,17 +16,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lab04.R // Asegúrate de que esta línea esté presente
 import com.example.lab04.ui.theme.DarkGray
 import com.example.lab04.ui.theme.Lab04Theme
 import com.example.lab04.ui.theme.OrangeJBL
@@ -39,19 +45,93 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Lab04Theme {
+                var sliderPosition by remember { mutableStateOf(0f) }
+                val backgroundColor = lerp(DarkGray, White, sliderPosition)
+
+                // Función para calcular el color del texto contrastante
+                val textColor = if (backgroundColor == DarkGray) {
+                    White
+                } else if (backgroundColor == White) {
+                    DarkGray
+                } else {
+                    // Para posiciones intermedias del slider, calculamos el mejor contraste
+                    val luminance = backgroundColor.red * 0.299 + backgroundColor.green * 0.587 + backgroundColor.blue * 0.114
+                    if (luminance > 0.5) DarkGray else White
+                }
+
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(DarkGray)
+                        .background(backgroundColor)
                 ) { innerPadding ->
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(DarkGray)
+                            .background(backgroundColor)
                             .padding(innerPadding),
                         contentAlignment = Alignment.Center
                     ) {
-                        Greeting(name = "Android")
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            // Título del proyecto
+                            Text(
+                                text = "LAB04 - Proyecto de Ejemplo",
+                                fontSize = 20.sp,
+                                color = textColor, // ← Usa el color calculado
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(bottom = 16.dp)
+                            )
+
+                            // Elemento de imagen
+                            Image(
+                                painter = painterResource(id = R.drawable.oso),
+                                contentDescription = "oso",
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .padding(bottom = 16.dp)
+                            )
+
+                            // Texto principal "Android"
+                            Text(
+                                text = "Android",
+                                fontSize = 48.sp,
+                                fontWeight = FontWeight.Black,
+                                color = textColor, // ← Usa el color calculado
+                                modifier = Modifier.padding(bottom = 32.dp)
+                            )
+
+                            // Tarjeta para el commit
+                            Card(
+                                modifier = Modifier
+                                    .size(width = 150.dp, height = 50.dp)
+                                    .clip(RoundedCornerShape(8.dp)),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = OrangeJBL,
+                                    contentColor = Black
+                                )
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = "COMMIT 3",
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+
+                            // Slider para la opacidad del fondo
+                            Slider(
+                                value = sliderPosition,
+                                onValueChange = { sliderPosition = it },
+                                modifier = Modifier.padding(top = 32.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -61,64 +141,81 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Título del proyecto
-        Text(
-            text = "LAB04 - Proyecto de Ejemplo",
-            fontSize = 20.sp,
-            color = White,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        // Elemento de imagen (nuevo)
-        Image(
-            painter = painterResource(id = R.drawable.oso), // Referencia a tu archivo oso.png
-            contentDescription = "oso",
-            modifier = Modifier.size(100.dp).padding(bottom = 16.dp)
-        )
-
-        // Texto principal "Android"
-        Text(
-            text = name,
-            fontSize = 48.sp,
-            fontWeight = FontWeight.Black,
-            color = White,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-
-        // Tarjeta para el commit
-        Card(
-            modifier = Modifier
-                .size(width = 150.dp, height = 50.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            colors = CardDefaults.cardColors(
-                containerColor = OrangeJBL,
-                contentColor = Black
-            )
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "COMMIT 2",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
+    // This composable is no longer used directly in setContent,
+    // but remains for preview purposes. The main logic is now in the setContent block.
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     Lab04Theme {
-        Greeting("Android")
+        var sliderPosition by remember { mutableStateOf(0f) }
+        val backgroundColor = lerp(DarkGray, White, sliderPosition)
+        val textColor = if (backgroundColor == DarkGray) White else DarkGray
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Título del proyecto
+            Text(
+                text = "LAB04 - Proyecto de Ejemplo",
+                fontSize = 20.sp,
+                color = textColor,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            // Elemento de imagen
+            Image(
+                painter = painterResource(id = R.drawable.oso),
+                contentDescription = "oso",
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(bottom = 16.dp)
+            )
+
+            // Texto principal "Android"
+            Text(
+                text = "Android",
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Black,
+                color = textColor,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+
+            // Tarjeta para el commit
+            Card(
+                modifier = Modifier
+                    .size(width = 150.dp, height = 50.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                colors = CardDefaults.cardColors(
+                    containerColor = OrangeJBL,
+                    contentColor = Black
+                )
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "COMMIT 3",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            // Slider para el preview también
+            Slider(
+                value = sliderPosition,
+                onValueChange = { sliderPosition = it },
+                modifier = Modifier.padding(top = 32.dp)
+            )
+        }
     }
 }
