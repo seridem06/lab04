@@ -15,9 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +42,7 @@ import com.example.lab04.ui.theme.OrangeJBL
 import com.example.lab04.ui.theme.White
 import com.example.lab04.ui.theme.Black
 
+@OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,21 +52,21 @@ class MainActivity : ComponentActivity() {
                 var sliderPosition by remember { mutableStateOf(0f) }
                 val backgroundColor = lerp(DarkGray, White, sliderPosition)
 
-                // Función para calcular el color del texto contrastante
-                val textColor = if (backgroundColor == DarkGray) {
-                    White
-                } else if (backgroundColor == White) {
-                    DarkGray
-                } else {
-                    // Para posiciones intermedias del slider, calculamos el mejor contraste
-                    val luminance = backgroundColor.red * 0.299 + backgroundColor.green * 0.587 + backgroundColor.blue * 0.114
-                    if (luminance > 0.5) DarkGray else White
-                }
-
                 Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(backgroundColor)
+                    topBar = {
+                        // Nuevo TopAppBar agregado aquí
+                        TopAppBar(
+                            title = {
+                                Text(
+                                    text = "Lab04_OVIEDO",
+                                    color = OrangeJBL,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkGray)
+                        )
+                    },
+                    modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
                     Box(
                         modifier = Modifier
@@ -76,15 +80,6 @@ class MainActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            // Título del proyecto
-                            Text(
-                                text = "LAB04 - Proyecto de Ejemplo",
-                                fontSize = 20.sp,
-                                color = textColor, // ← Usa el color calculado
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            )
-
                             // Elemento de imagen
                             Image(
                                 painter = painterResource(id = R.drawable.oso),
@@ -99,7 +94,7 @@ class MainActivity : ComponentActivity() {
                                 text = "Android",
                                 fontSize = 48.sp,
                                 fontWeight = FontWeight.Black,
-                                color = textColor, // ← Usa el color calculado
+                                color = Black,
                                 modifier = Modifier.padding(bottom = 32.dp)
                             )
 
@@ -118,7 +113,7 @@ class MainActivity : ComponentActivity() {
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
-                                        text = "COMMIT 3",
+                                        text = "COMMIT 4",
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold
                                     )
@@ -149,14 +144,10 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     Lab04Theme {
-        var sliderPosition by remember { mutableStateOf(0f) }
-        val backgroundColor = lerp(DarkGray, White, sliderPosition)
-        val textColor = if (backgroundColor == DarkGray) White else DarkGray
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(backgroundColor)
+                .background(DarkGray)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -165,7 +156,7 @@ fun GreetingPreview() {
             Text(
                 text = "LAB04 - Proyecto de Ejemplo",
                 fontSize = 20.sp,
-                color = textColor,
+                color = White,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
@@ -184,7 +175,7 @@ fun GreetingPreview() {
                 text = "Android",
                 fontSize = 48.sp,
                 fontWeight = FontWeight.Black,
-                color = textColor,
+                color = White,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
@@ -203,19 +194,12 @@ fun GreetingPreview() {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "COMMIT 3",
+                        text = "COMMIT 1",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
             }
-
-            // Slider para el preview también
-            Slider(
-                value = sliderPosition,
-                onValueChange = { sliderPosition = it },
-                modifier = Modifier.padding(top = 32.dp)
-            )
         }
     }
 }
