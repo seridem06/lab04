@@ -9,7 +9,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,7 +57,6 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     topBar = {
-                        // Nuevo TopAppBar agregado aquí
                         TopAppBar(
                             title = {
                                 Text(
@@ -63,7 +65,7 @@ class MainActivity : ComponentActivity() {
                                     fontWeight = FontWeight.Bold
                                 )
                             },
-                            colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkGray)
+                            colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DarkGray)
                         )
                     },
                     modifier = Modifier.fillMaxSize()
@@ -75,58 +77,8 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding),
                         contentAlignment = Alignment.Center
                     ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            // Elemento de imagen
-                            Image(
-                                painter = painterResource(id = R.drawable.oso),
-                                contentDescription = "oso",
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .padding(bottom = 16.dp)
-                            )
-
-                            // Texto principal "Android"
-                            Text(
-                                text = "Android",
-                                fontSize = 48.sp,
-                                fontWeight = FontWeight.Black,
-                                color = Black,
-                                modifier = Modifier.padding(bottom = 32.dp)
-                            )
-
-                            // Tarjeta para el commit
-                            Card(
-                                modifier = Modifier
-                                    .size(width = 150.dp, height = 50.dp)
-                                    .clip(RoundedCornerShape(8.dp)),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = OrangeJBL,
-                                    contentColor = Black
-                                )
-                            ) {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        text = "COMMIT 4",
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
-                            }
-
-                            // Slider para la opacidad del fondo
-                            Slider(
-                                value = sliderPosition,
-                                onValueChange = { sliderPosition = it },
-                                modifier = Modifier.padding(top = 32.dp)
-                            )
-                        }
+                        // Llamada a la función corregida y estilizada
+                        ViewHolaCurso()
                     }
                 }
             }
@@ -134,52 +86,42 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// Función Corregida y Estilizada
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    // This composable is no longer used directly in setContent,
-    // but remains for preview purposes. The main logic is now in the setContent block.
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Lab04Theme {
+fun ViewHolaCurso() {
+    // Componente principal para el estilo del fondo
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(0.85f)
+            .padding(16.dp),
+        colors = CardDefaults.cardColors(containerColor = DarkGray.copy(alpha = 0.9f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+    ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(DarkGray)
-                .padding(16.dp),
+                .fillMaxWidth()
+                .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Título del proyecto
+            // Título Principal
             Text(
-                text = "LAB04 - Proyecto de Ejemplo",
+                text = "Welcome to the Course!",
+                fontSize = 28.sp,
+                color = OrangeJBL,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Subtítulo
+            Text(
+                text = "Hello, Student!",
                 fontSize = 20.sp,
-                color = White,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
+                color = White
             )
+            Spacer(modifier = Modifier.height(24.dp))
 
-            // Elemento de imagen
-            Image(
-                painter = painterResource(id = R.drawable.oso),
-                contentDescription = "oso",
-                modifier = Modifier
-                    .size(100.dp)
-                    .padding(bottom = 16.dp)
-            )
-
-            // Texto principal "Android"
-            Text(
-                text = "Android",
-                fontSize = 48.sp,
-                fontWeight = FontWeight.Black,
-                color = White,
-                modifier = Modifier.padding(bottom = 32.dp)
-            )
-
-            // Tarjeta para el commit
+            // Tarjeta de commit (Agregada para mantener la estructura visual)
             Card(
                 modifier = Modifier
                     .size(width = 150.dp, height = 50.dp)
@@ -194,12 +136,26 @@ fun GreetingPreview() {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "COMMIT 1",
+                        text = "UPGRADED",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    // Este composable ya no es el principal
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    Lab04Theme {
+        ViewHolaCurso()
     }
 }
